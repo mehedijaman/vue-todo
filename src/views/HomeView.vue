@@ -31,7 +31,9 @@ async function store(){
         body: JSON.stringify(formData)
     })
 
-    todos.pending.push(formData)
+    const data = await response.json()
+
+    todos.pending.push(data)
     formData.task = ''
     calculateTotal()
 }
