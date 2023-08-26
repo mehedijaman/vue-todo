@@ -2,18 +2,23 @@
 import {ref,reactive, onMounted, nextTick} from 'vue'
 
 const baseUrl = 'http://localhost:8000/api/todo'
-let todos = ref('')
+let todos = reactive({})
 let totalPending = ref('')
 let totalCompleted = ref('')
 
-const formData = reactive({})
+const formData = {}
 const taskDetails = ref({})
+
+function calculateTotal(){
+    totalPending.value = todos.pending.length
+    totalCompleted.value = todos.completed.length
+}
 
 async function getAll(){
     const res = await fetch(baseUrl)
-    todos.value = await res.json()
-    totalPending.value = todos.value.pending.length
-    totalCompleted.value = todos.value.completed.length
+    const data = await res.json()
+    Object.assign(todos,data)  //new
+    calculateTotal()
 }
 
 async function store(){
@@ -25,39 +30,45 @@ async function store(){
         body: JSON.stringify(formData)
     })
 
-    nextTick(() => {
-        getAll()
-    })
+    todos.pending.push(formData)
+    formData.task = ''
+    calculateTotal()
 }
 
 async function complete(id){
     const response = await fetch(`${baseUrl}/done/${id}`,{
         method: 'POST',
     })
+    const data = await response.json()
 
-    nextTick(() => {
-        getAll()
-    })
+    const index = todos.pending.findIndex(x=>x.id === id)
+    todos.completed.push(todos.pending[index])
+    todos.pending.splice(index,1)
+    calculateTotal()
 }
 
 async function undo(id){
     const response = await fetch(`${baseUrl}/undo/${id}`,{
         method: 'POST',
     })
+    const data = await response.json()
 
-    nextTick(() => {
-        getAll()
-    })
+    const index = todos.completed.findIndex(x=>x.id === id)
+    todos.pending.push(todos.completed[index])
+    todos.completed.splice(index,1)
+    calculateTotal()
 }
 
-async function destroy(id){
+async function destroy(id, position){
     const response = await fetch(`${baseUrl}/destroy/${id}`,{
         method: 'DELETE',
     })
 
-    nextTick(() => {
-        getAll()
-    })
+    const data = await response.json()
+
+    const index = todos[position].findIndex(x=>x.id === id)
+    todos[position].splice(index,1)
+    calculateTotal()
 }
 
 async function edit(id){
@@ -89,9 +100,9 @@ onMounted(() => {
 
 <template>    
    <div class="min-h-screen w-screen bg-gradient-to-r from-red-300 to-sky-300 flex flex-col gap-2 p-10 items-center">
-        <h1 class="text-xl text-red-900 font-bold">Simple Todo App</h1>  
-        {{ taskDetails }}      
-        <div v-if="taskDetails.length == 0" class="max-w-4xl w-full bg-white p-2 rounded-sm shadow-lg">
+        <h1 class="text-xl text-red-900 font-bold">Simple Todo App</h1>
+        
+        <div class="max-w-4xl w-full bg-white p-2 rounded-sm shadow-lg">
             <form enctype="multipart/form-data" class="grid grid-cols-12 gap-2">
                 <div class="col-span-9">
                     <input v-model="formData.task" class="w-full p-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
@@ -102,7 +113,7 @@ onMounted(() => {
             </form>
         </div>
 
-        <div v-if="taskDetails.length != 0" class="max-w-4xl w-full bg-white p-2 rounded-sm shadow-lg">
+        <!-- <div v-if="taskDetails.length != 0" class="max-w-4xl w-full bg-white p-2 rounded-sm shadow-lg">
             <form enctype="multipart/form-data" class="grid grid-cols-12 gap-2">
                 <div class="col-span-9">
                     <input v-model="taskDetails.task"  class="w-full p-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
@@ -111,22 +122,23 @@ onMounted(() => {
                     <input @click.prevent="update(taskDetails.id)" class="w-full px-5 py-2 bg-sky-400 text-white rounded-md font-semibold hover:bg-sky-500  hover:cursor-pointer" type="submit" name="submit" value="UpdateTask">
                 </div>
             </form>
-        </div>
+        </div> -->
 
         <div class="max-w-4xl w-full bg-white p-2 raounded-sm shadow-lg">
             <table class="w-full table-fixed border-collapse border-slate-950 hover:border-blue-950">
                 <thead>
+                    <tr>
+                        <td colspan="2" class="py-1 font-bold text-center"><p class="p-2 bg-red-400 text-white">Pending</p></td>
+                    </tr>
                     <tr>
                         <th class="p-2 border border-slate-300">Todo Task Description</th>
                         <th class="p-2 border border-slate-300">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="2" class="py-1 font-bold text-center bg-red-400 text-white">Pending</td>
-                    </tr>
+                    
                     <tr v-if="totalPending == 0">
-                        <td colspan="2">No pending task available</td>
+                        <td colspan="2" class="text-center">No pending task available</td>
                     </tr>
                     <tr v-for="(pending, index) in todos.pending" :key="index">
                         <td class="p-2 border border-slate-300">
@@ -142,15 +154,19 @@ onMounted(() => {
                             </form>
 
                             <form  enctype="multipart/form-data">
-                                <input @click.prevent="destroy(pending.id)" type="submit" name="submit" value="Delete" class="px-2 bg-red-400 text-white rounded-md hover:bg-red-600 font-semibold hover:cursor-pointer">
+                                <input @click.prevent="destroy(pending.id, 'pending')" type="submit" name="submit" value="Delete" class="px-2 bg-red-400 text-white rounded-md hover:bg-red-600 font-semibold hover:cursor-pointer">
                             </form>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="py-1 font-bold bg-green-800 text-white text-center">Completed</td>
+                        <td colspan="2" class="py-1 font-bold text-center"><p class="bg-sky-500 p-2">Completed</p></td>
+                    </tr>
+                    <tr>
+                        <th class="p-2 border border-slate-300">Todo Task Description</th>
+                        <th class="p-2 border border-slate-300">Action</th>
                     </tr>
                     <tr v-if="totalCompleted == 0">
-                        <td colspan="2">No Completed task available</td>
+                        <td colspan="2" class="text-center">No Completed task available</td>
                     </tr>
 
                     <tr v-for="(completed,index) in todos.completed" :key="index">
@@ -165,7 +181,7 @@ onMounted(() => {
                                 <input @click.prevent="edit(completed.id)"  type="submit" name="submit" value="Edit" class="px-2 bg-yellow-400 text-white rounded-md hover:bg-yellow-600 font-semibold hover:cursor-pointer">
                             </form>
                             <form enctype="multipart/form-data">
-                                <input  @click.prevent="destroy(completed.id)" type="submit" name="submit" value="Delete" class="px-2 bg-red-400 text-white rounded-md hover:bg-red-600 font-semibold hover:cursor-pointer">
+                                <input  @click.prevent="destroy(completed.id, 'completed')" type="submit" name="submit" value="Delete" class="px-2 bg-red-400 text-white rounded-md hover:bg-red-600 font-semibold hover:cursor-pointer">
                             </form>
                         </td>
                     </tr>
@@ -173,4 +189,5 @@ onMounted(() => {
             </table>
         </div>
    </div>
+
 </template>
