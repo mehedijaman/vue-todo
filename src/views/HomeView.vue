@@ -76,6 +76,8 @@ async function edit(id){
         method: 'GET',
     })
     taskDetails.value = await response.json()
+
+    modalOpen.value = true
 }
 
 async function update(id){
@@ -90,11 +92,15 @@ async function update(id){
     nextTick(() => {
         getAll()
     })
+
+    modalOpen.value = false
 }
 
 onMounted(() => {
     getAll()
 })
+
+const modalOpen = ref(false)
 
 </script>
 
@@ -112,17 +118,6 @@ onMounted(() => {
                 </div>
             </form>
         </div>
-
-        <!-- <div v-if="taskDetails.length != 0" class="max-w-4xl w-full bg-white p-2 rounded-sm shadow-lg">
-            <form enctype="multipart/form-data" class="grid grid-cols-12 gap-2">
-                <div class="col-span-9">
-                    <input v-model="taskDetails.task"  class="w-full p-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
-                </div>
-                <div class="col-span-3 flex items-center">
-                    <input @click.prevent="update(taskDetails.id)" class="w-full px-5 py-2 bg-sky-400 text-white rounded-md font-semibold hover:bg-sky-500  hover:cursor-pointer" type="submit" name="submit" value="UpdateTask">
-                </div>
-            </form>
-        </div> -->
 
         <div class="max-w-4xl w-full bg-white p-2 raounded-sm shadow-lg">
             <table class="w-full table-fixed border-collapse border-slate-950 hover:border-blue-950">
@@ -190,4 +185,19 @@ onMounted(() => {
         </div>
    </div>
 
+    <div v-if="modalOpen" class="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 py-10">
+        <div class="max-h-full w-full max-w-xl overflow-y-auto sm:rounded-2xl bg-white">
+            <div class="w-full">
+            <div class="m-8 my-20 max-w-[400px] mx-auto">
+                <div class="mb-8">
+                    <input v-model="taskDetails.task"  class="w-full p-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
+                </div>
+                <div class="space-y-4">
+                <button @click.prevent="update(taskDetails.id)" class="p-3 bg-black rounded-full text-white w-full font-semibold">Update Task</button>
+                <button @click="modalOpen = false" class="p-3 bg-white border rounded-full w-full font-semibold">Cancel</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
 </template>
