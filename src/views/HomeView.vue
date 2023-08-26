@@ -1,5 +1,6 @@
 <script setup>
 import {ref,reactive, onMounted, nextTick} from 'vue'
+import ModalComponent from '../components/ModalComponent.vue'
 
 const baseUrl = 'http://localhost:8000/api/todo'
 let todos = reactive({})
@@ -185,19 +186,11 @@ const modalOpen = ref(false)
         </div>
    </div>
 
-    <div v-if="modalOpen" class="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 py-10">
-        <div class="max-h-full w-full max-w-xl overflow-y-auto sm:rounded-2xl bg-white">
-            <div class="w-full">
-            <div class="m-8 my-20 max-w-[400px] mx-auto">
-                <div class="mb-8">
-                    <input v-model="taskDetails.task"  class="w-full p-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
-                </div>
-                <div class="space-y-4">
-                <button @click.prevent="update(taskDetails.id)" class="p-3 bg-black rounded-full text-white w-full font-semibold">Update Task</button>
-                <button @click="modalOpen = false" class="p-3 bg-white border rounded-full w-full font-semibold">Cancel</button>
-                </div>
-            </div>
-            </div>
+    <ModalComponent v-if="modalOpen">
+        <input v-model="taskDetails.task"  class="w-full p-2 mb-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
+        <div class="space-y-4">
+            <button @click.prevent="update(taskDetails.id)" class="p-3 bg-black rounded-full text-white w-full font-semibold">Update Task</button>
+            <button @click="modalOpen = false" class="p-3 bg-white border rounded-full w-full font-semibold">Cancel</button>
         </div>
-    </div>
+    </ModalComponent>
 </template>
