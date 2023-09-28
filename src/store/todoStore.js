@@ -6,10 +6,10 @@ const todoStore = defineStore('todo', () =>{
 
     const todos = reactive([]);
     const pending = computed(() =>{
-        return todos.filter((todo) => !todo.completed);
+        return todos.filter((todo) => !todo.completed).reverse();
     });
     const completed = computed(() => {
-        return todos.filter((todo) => todo.completed);
+        return todos.filter((todo) => todo.completed).reverse();
     });
 
     const totalPending = computed(() => pending.value.length);

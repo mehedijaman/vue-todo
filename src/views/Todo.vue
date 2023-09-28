@@ -2,14 +2,12 @@
 import {ref,reactive, onMounted, nextTick} from 'vue';
 import Modal from '../components/Modal.vue';
 
-
 import {todoStore} from '../store/todoStore';
 const todo = todoStore();
 
 // const taskDetails = ref({})
 
 // const modalOpen = ref(false)
-// const position = ref('')
 
 const formData = reactive({
     todo:'',
@@ -17,12 +15,13 @@ const formData = reactive({
     userId:1
 });
 
-const doneFormData = {
-    completed:true
+function add(){
+    todo.action.add(formData);
+    formData.todo = '';
 }
 
-const undoFormData = {
-    completed:false
+const doneFormData = {
+    completed:true
 }
 
 onMounted(() => {
@@ -33,18 +32,18 @@ onMounted(() => {
 
 <template>
         <div class="min-h-screen w-screen bg-gradient-to-r from-red-300 to-sky-300 flex flex-col gap-2 p-10 items-center">
-        <div class="max-w-4xl w-full bg-white p-2 rounded-sm shadow-lg">
+        <div class="max-w-2xl w-full bg-white p-2 rounded-sm shadow-lg">
             <form enctype="multipart/form-data" class="grid grid-cols-12 gap-2">
                 <div class="col-span-9">
                     <input v-model="formData.todo" class="w-full p-2 border focus:outline-none focus:border-green-200 focus:shadow-lg" type="text" name="task" placeholder="Enter new Task Description">
                 </div>
                 <div class="col-span-3 flex items-center">
-                    <input @click.prevent="todo.action.add(formData)" class="w-full px-5 py-2 bg-sky-400 text-white rounded-md font-semibold hover:bg-sky-500  hover:cursor-pointer" type="submit" name="submit" value="Add new Task">
+                    <input @click.prevent="add()" class="w-full px-5 py-2 bg-sky-400 text-white rounded-md font-semibold hover:bg-sky-500  hover:cursor-pointer" type="submit" name="submit" value="Add new Task">
                 </div>
             </form>
         </div>
 
-        <div class="max-w-4xl w-full bg-white p-2 raounded-sm shadow-lg">
+        <div class="max-w-2xl w-full bg-white p-2 raounded-sm shadow-lg">
             <table class="w-full table-fixed border-collapse border-slate-950 hover:border-blue-950">
                 <thead>
                     <tr>
