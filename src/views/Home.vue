@@ -13,7 +13,7 @@ import { RouterLink } from 'vue-router';
                             Simple Vue Todo App Designed with the awesome Tailwind CSS
                         </h1>
                         <p class="mb-10 my-2 text-gray-800">Do you often forget what todo? Here is the solution. Keep track all of your todo list. </p>
-                        <router-link to="/"  class="sm:w-full lg:w-auto my-2 border rounded md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 mt-10">Start using the app</router-link>
+                        <router-link to="/todo"  class="sm:w-full lg:w-auto my-2 border rounded md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 mt-10">Start using the app</router-link>
                     </div>
                 </div>
                 <div>

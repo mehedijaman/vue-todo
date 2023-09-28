@@ -6,8 +6,8 @@ import { authStore } from '../store/authStore';
 const auth = authStore();
 const router = useRouter();
 
-const email = ref('');
-const password = ref('');
+const email = ref('kminchelle');
+const password = ref('0lelplR');
 
 const redirect = () => {
     router.push({path:'/'});

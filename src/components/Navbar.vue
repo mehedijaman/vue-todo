@@ -33,13 +33,17 @@ const navigation = [
             </router-link>
             <div class="hidden sm:ml-6 sm:block">
               <div class="flex space-x-4">
-                <router-link v-for="item in navigation" :key="item.name" :to="item.to" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
+                <template v-if="!auth.isAuthenticated">
+                  <router-link to="/login" class="text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium">Login</router-link>
+                  <router-link to="/register" class="text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium">Register</router-link>
+                </template>
+                <router-link v-if="auth.isAuthenticated" v-for="item in navigation" :key="item.name" :to="item.to" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
               </div>
             </div>
           </div>
           <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">  
             <!-- Profile dropdown -->
-            <Menu as="div" class="relative ml-3">
+            <Menu v-if="auth.isAuthenticated" as="div" class="relative ml-3">
               <div>
                 <MenuButton class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span class="absolute -inset-1.5" />
