@@ -18,8 +18,6 @@ const redirect = () => {
 <template>    
     <div class="bg-[#F9FAFB] h-screen w-screen flex items-center">
         <div class="h-max mx-auto flex flex-col items-center">
-            <img class="h-[40px] w-[47px] mb-5" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
-            <h1 class="text-xl font-bold text-center pb-10">Simple ToDo App</h1>
             <div class="bg-white shadow-xl p-10 flex flex-col gap-4 text-sm">
                 <div>
                     <label class="text-gray-600 font-bold inline-block pb-2" for="email">Email</label>

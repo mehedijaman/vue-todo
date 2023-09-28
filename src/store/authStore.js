@@ -1,9 +1,6 @@
 import {ref, reactive} from 'vue';
-import { useRouter } from 'vue-router';
+import router from '../router/index';
 import {defineStore} from 'pinia';
-
-const router = useRouter();
-
 
 const authStore = defineStore('auth', () => {
     let isAuthenticated = localStorage.getItem('isAuthenticated');
@@ -11,13 +8,13 @@ const authStore = defineStore('auth', () => {
     
     const login = (email, password) => {
         fetch('https://dummyjson.com/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({            
-            username: 'kminchelle',
-            password: '0lelplR',
-            // expiresInMins: 60, // optional
-        })
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({            
+                username: 'kminchelle',
+                password: '0lelplR',
+                // expiresInMins: 60, // optional
+            })
         })  
         .then(res => res.json())
         .then((res) => {
@@ -34,7 +31,9 @@ const authStore = defineStore('auth', () => {
     };
 
     const logout = () => {
-
+        localStorage.setItem('isAuthenticated',false);
+        localStorage.setItem('user', null);
+        router.push('/login');
     };
 
     return {isAuthenticated, register, login, logout};
