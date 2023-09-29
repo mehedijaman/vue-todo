@@ -1,20 +1,22 @@
 <script setup>
-import {ref, reactive} from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import {ref} from 'vue';
+import { RouterLink } from 'vue-router';
 import authStore from '../store/authStore';
 
 const auth = authStore();
-const router = useRouter();
+// import {Form,Field, defineRule,ErrorMessage} from 'vee-validate';
+// import {required,email, min, max, alpha_spaces} from from '@vee-validate/rules';
 
-const email = ref('kminchelle');
-const password = ref('0lelplR');
+// defineRule('required', required);
+// defineRule('email', email);
 
-const redirect = () => {
-    router.push({path:'/'});
-};
 
+
+const email = ref('mail4mjaman@gmail.com');
+const password = ref('12345');
 
 </script>
+
 <template>    
     <div class="bg-[#F9FAFB] h-screen w-screen flex items-center">
         <div class="h-max mx-auto flex flex-col items-center">
@@ -31,7 +33,9 @@ const redirect = () => {
                     <input @click="auth.login(email,password)"  class="bg-[#4F46E5] w-full py-2 rounded-md text-white font-bold cursor-pointer hover:bg-[#181196]" type="submit" value="Login" >
                 </div>
                 <div>
-                    <p class="text-center">Don't have an account? <span class="font-bold text-[#4F46E5]"><router-link to="/register">Register now</router-link></span></p>
+                    <p class="text-center">
+                        Don't have an account? <span class="font-bold text-[#4F46E5]"><router-link to="/register">Register now</router-link></span>
+                    </p>
                 </div>
             </div>
         </div>
