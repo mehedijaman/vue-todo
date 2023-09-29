@@ -1,5 +1,5 @@
 <script setup>
-import {ref,reactive, onMounted, nextTick} from 'vue';
+import {ref,reactive} from 'vue';
 import Modal from '../components/Modal.vue';
 
 import todoStore from '../store/todoStore';
@@ -26,7 +26,7 @@ const doneFormData = {
 </script>
 
 <template>
-        <div class="min-h-screen w-screen bg-gradient-to-r from-red-300 to-sky-300 flex flex-col gap-2 p-10 items-center">
+    <div class="min-h-screen w-screen bg-gradient-to-r from-red-300 to-sky-300 flex flex-col gap-2 p-10 items-center">
         <div class="max-w-2xl w-full bg-white p-2 rounded-sm shadow-lg">
             <form enctype="multipart/form-data" class="grid grid-cols-12 gap-2">
                 <div class="col-span-9">
