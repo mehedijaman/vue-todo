@@ -1,7 +1,7 @@
 <script setup>
 import {ref, reactive} from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import { authStore } from '../store/authStore';
+import authStore from '../store/authStore';
 
 const auth = authStore();
 const router = useRouter();

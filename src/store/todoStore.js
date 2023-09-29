@@ -62,4 +62,4 @@ const todoStore = defineStore('todo', () =>{
     return {todos,pending,completed,totalPending,totalCompleted,action};
 });
 
-export {todoStore};
+export default todoStore;

@@ -2,10 +2,9 @@
 import {ref,reactive, onMounted, nextTick} from 'vue';
 import Modal from '../components/Modal.vue';
 
-import {todoStore} from '../store/todoStore';
+import todoStore from '../store/todoStore';
 const todo = todoStore();
 
-// const taskDetails = ref({})
 
 // const modalOpen = ref(false)
 
@@ -23,10 +22,6 @@ function add(){
 const doneFormData = {
     completed:true
 }
-
-onMounted(() => {
-    todo.action.fetch();
-})
 
 </script>
 
