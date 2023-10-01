@@ -4,60 +4,66 @@ import {defineStore} from 'pinia';
 
 import todoStore from './todoStore';
 
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+const notify = (message) => {
+  toast(message, {
+    autoClose: 1000,
+    position: toast.POSITION.TOP_RIGHT,
+  });
+}
+
 
 const authStore = defineStore('auth', () => {
     const isAuthenticated = ref(localStorage.getItem('isAuthenticated'));
-    const user = ref({
-        email:'mail4mjaman@gmail.com',
-        password:'12345',
-    });
+    const user = reactive({});
 
-    const login = (email, password) => {
-        if(JSON.parse(localStorage.getItem('user')) != null)
-            user.value = JSON.parse(localStorage.getItem('user'));
+    const localUser = localStorage.getItem('localUser');
 
-        if(user.value.email == email && user.value.password == password){
+    if( localUser != null){
+        Object.assign(user,JSON.parse(localUser));
+    }
+
+    const login = (email, password) => {   
+        if(user.email == email && user.password == password){
             localStorage.setItem('isAuthenticated',true);
             isAuthenticated.value = true;
             todoStore().action.fetch();
             router.push('/todo');
         }
-        else{
-            console.log('Username or Password is incorrect');
+        else if('mail4mjaman@gmail.com' == email && '123' == password){
+            localStorage.setItem('isAuthenticated',true);
+            isAuthenticated.value = true;
+
+            Object.assign(user,{
+                firstName:'Mehedi',
+                lastName:'Jaman',
+                email: 'mail4mjaman@gmail.com',
+                role:'Admin',
+                username:'mehedijaman',
+                password:'123',
+                gender:'Male',
+                image:'https://secure.gravatar.com/avatar/007ffebe54eb25dcf712490b27a60e87?s=64&d=mm&r=g'
+            });
+            
+            todoStore().action.fetch();
+            router.push('/todo');
         }
-
-        // fetch('https://dummyjson.com/auth/login', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({            
-        //         username: 'kminchelle',
-        //         password: '0lelplR',
-        //     })
-        // })  
-        // .then(res => res.json())
-        // .then((res) => {
-        //     localStorage.setItem('isAuthenticated',true);
-        //     isAuthenticated.value = true;
-        //     localStorage.setItem('user', JSON.stringify(res));
-        //     user.value = res;
-
-        //     todoStore().action.fetch();
-        //     router.push('/todo');
-        // });
+        else{
+            notify('Username or Password is incorrect');
+        }
     };
 
     const register = (formData) => {
-        if(localStorage.setItem('user', JSON.stringify(formData))){
-            return formData;
-        }
-
-        return false;
+        localStorage.setItem('localUser', JSON.stringify(formData))
+        Object.assign(user, formData);
+        notify('User Registration Successful');
     };
 
     const logout = () => {
         localStorage.setItem('isAuthenticated',false);
         isAuthenticated.value = false;
-        localStorage.setItem('user', null);
         user.value = null;
         router.push('/login');
     };

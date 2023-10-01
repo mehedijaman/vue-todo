@@ -1,5 +1,14 @@
 import {ref, reactive, computed} from 'vue';
 import {defineStore} from 'pinia';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+const notify = (message) => {
+  toast(message, {
+    autoClose: 1000,
+    position: toast.POSITION.TOP_RIGHT,
+  });
+}
 
 const todoStore = defineStore('todo', () =>{
     const baseUrl = 'https://dummyjson.com/todos';
@@ -33,6 +42,8 @@ const todoStore = defineStore('todo', () =>{
             .then((res) => {
                 todos.push(res);
             });
+
+            notify('Task Added Successfully ');
         },
         update: (id, formData) => {
             fetch(`${baseUrl}/${id}`, {
@@ -46,6 +57,8 @@ const todoStore = defineStore('todo', () =>{
                 todos.splice(index, 1)
                 todos.push(res)
             });
+
+            notify('Task Updated ');
         },
         delete: (id) =>{
             fetch(`${baseUrl}/${id}`, {
@@ -56,6 +69,8 @@ const todoStore = defineStore('todo', () =>{
                 const index = todos.findIndex(element => element.id == id)
                 todos.splice(index, 1)
             }); 
+
+            notify('Task Deleted Successfully ');
         }
     }
 

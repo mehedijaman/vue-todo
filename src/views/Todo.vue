@@ -5,9 +5,6 @@ import Modal from '../components/Modal.vue';
 import todoStore from '../store/todoStore';
 const todo = todoStore();
 
-
-// const modalOpen = ref(false)
-
 const formData = reactive({
     todo:'',
     completed:false,

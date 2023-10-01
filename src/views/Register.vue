@@ -4,7 +4,25 @@ import { RouterLink } from 'vue-router';
 import authStore from '../store/authStore';
 const auth = authStore();
 
-const formData = reactive({});
+const formData = reactive({
+    firstName:'',
+    lastName:'',
+    email: '',
+    password: '',
+    role:'Admin',
+    username:'',
+    gender:'Male',
+    image:'https://secure.gravatar.com/avatar/007ffebe54eb25dcf712490b27a60e87?s=64&d=mm&r=g'
+});
+
+function register(){
+    auth.register(formData);
+    formData.firstName = '';
+    formData.lastName = '';
+    formData.email = '';
+    formData.password = '';
+    formData.confirm_password = '';
+}
 </script>
 <template>
     <div class="min-h-screen w-screen bg-gradient-to-l to-red-200 from-slate-200 flex items-center">
@@ -22,8 +40,13 @@ const formData = reactive({});
 
                 <form action="" class="flex flex-col gap-4">
                     <div>
-                        <label for="name" class="text-gray-500 inline-block pb-2">Full Name</label>
-                        <input v-model="formData.fullName"  class="w-full border-gray-200 px-4 py-2 focus:outline-none" type="text" name="name" placeholder="Mehedi Jaman">
+                        <label for="name" class="text-gray-500 inline-block pb-2">First Name</label>
+                        <input v-model="formData.firstName"  class="w-full border-gray-200 px-4 py-2 focus:outline-none" type="text" name="name" placeholder="Mehedi Jaman">
+                    </div>
+
+                    <div>
+                        <label for="name" class="text-gray-500 inline-block pb-2">Last Name</label>
+                        <input v-model="formData.lastName"  class="w-full border-gray-200 px-4 py-2 focus:outline-none" type="text" name="name" placeholder="Mehedi Jaman">
                     </div>
 
                     <div>
@@ -41,7 +64,7 @@ const formData = reactive({});
                     </div>
 
                     <div>
-                        <input @click.prvent="auth.register(formData)" class="w-full bg-blue-600 py-2 rounded-md text-white font-bold cursor-pointer" type="button" value="Sign Up">
+                        <input @click.prvent="register()" class="w-full bg-blue-600 py-2 rounded-md text-white font-bold cursor-pointer" type="button" value="Sign Up">
                     </div>
                 </form>
                 

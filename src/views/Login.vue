@@ -13,7 +13,7 @@ const auth = authStore();
 
 
 const email = ref('mail4mjaman@gmail.com');
-const password = ref('12345');
+const password = ref('123');
 
 </script>
 
