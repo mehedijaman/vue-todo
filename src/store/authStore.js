@@ -16,9 +16,10 @@ const notify = (message) => {
 
 
 const authStore = defineStore('auth', () => {
-    const isAuthenticated = ref(localStorage.getItem('isAuthenticated'));
+    const isAuthenticated = ref('');
     const user = reactive({});
 
+    isAuthenticated.value = localStorage.getItem('isAuthenticated');
     const localUser = localStorage.getItem('localUser');
 
     if( localUser != null){
