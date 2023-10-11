@@ -10,6 +10,9 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
+    "i": "^0.3.7",
+    "npm": "^10.2.0",
+    "or": "^0.2.0",
     "pinia": "^2.1.6",
     "vee-validate": "^4.11.7",
     "vue": "^3.3.4",
@@ -19,9 +22,13 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.3.1",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/compiler-sfc": "^3.3.4",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.28",
     "tailwindcss": "^3.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9"
   }
 }
