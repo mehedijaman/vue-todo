@@ -7,7 +7,18 @@ import todoStore from "./todoStore";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-const notify = (message) => {
+interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  username: string;
+  password: string;
+  gender: string;
+  image: string;
+}
+
+const notify = (message: string) => {
   toast(message, {
     autoClose: 1000,
     position: toast.POSITION.TOP_RIGHT,
@@ -15,24 +26,24 @@ const notify = (message) => {
 };
 
 const authStore = defineStore("auth", () => {
-  const isAuthenticated = ref("");
-  const user = reactive({});
+  const isAuthenticated = ref(true);
+  const user: Partial<User> = reactive({});
 
-  isAuthenticated.value = localStorage.getItem("isAuthenticated");
+  isAuthenticated.value = Boolean(localStorage.getItem("isAuthenticated"));
   const localUser = localStorage.getItem("localUser");
 
   if (localUser != null) {
     Object.assign(user, JSON.parse(localUser));
   }
 
-  const login = (email, password) => {
-    if (user.email == email && user.password == password) {
-      localStorage.setItem("isAuthenticated", true);
+  const login = (email: string, password: string) => {
+    if (user.email === email && user.password === password) {
+      localStorage.setItem("isAuthenticated", JSON.stringify(true));
       isAuthenticated.value = true;
       todoStore().action.fetch();
       router.push("/todo");
     } else if ("mail4mjaman@gmail.com" == email && "123" == password) {
-      localStorage.setItem("isAuthenticated", true);
+      localStorage.setItem("isAuthenticated", JSON.stringify(true));
       isAuthenticated.value = true;
 
       Object.assign(user, {
@@ -54,16 +65,16 @@ const authStore = defineStore("auth", () => {
     }
   };
 
-  const register = (formData) => {
+  const register = (formData: User) => {
     localStorage.setItem("localUser", JSON.stringify(formData));
     Object.assign(user, formData);
     notify("User Registration Successful");
   };
 
   const logout = () => {
-    localStorage.setItem("isAuthenticated", false);
+    localStorage.setItem("isAuthenticated", JSON.stringify(true));
     isAuthenticated.value = false;
-    user.value = null;
+    //user.value = null;
     router.push("/login");
   };
 
